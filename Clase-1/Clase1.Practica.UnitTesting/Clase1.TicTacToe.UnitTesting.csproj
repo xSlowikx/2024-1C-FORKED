@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Clase1.Practica.Consola\Clase1.Practica.Consola.csproj" />
+    <ProjectReference Include="..\Clase1.Practica.Consola\Clase1.TicTacToe.Consola.csproj" />
   </ItemGroup>
 
 </Project>
