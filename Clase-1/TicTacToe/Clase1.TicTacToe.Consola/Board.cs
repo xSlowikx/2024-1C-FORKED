@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Clase1.TicTacToe.Consola;
+namespace Clase1.ITicTacToe.Consola;
 
 public class Board
 {

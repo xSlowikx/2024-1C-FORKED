@@ -1,29 +1,34 @@
 ﻿using System;
 
-namespace Clase1.TicTacToe.Consola;
+namespace Clase1.ITicTacToe.Consola;
 
 public interface ConsoleIO
 {
     void writeLine(string format, params object[] args);
-    int readLine();
-    void clear();
+    void writeLine(string message);
+    String readLine();
+    // void clear();
 }
 
 public class ConsoleIOImplementation : ConsoleIO
 {
-    public int readLine()
+    public virtual String readLine()
     {
-        int choice = int.Parse(s: Console.ReadLine());
-        return choice;
+        return Console.ReadLine();
     }
 
-    public void writeLine(string format, params object[] args)
+    public virtual void writeLine(string format, params object[] args)
     {
         Console.WriteLine(format, args);
     }
 
-    public void clear()
+    /* public void clear()
     {
-        Console.Clear();
+        // Console.Clear();
+    } */
+
+    public virtual void writeLine(string message)
+    {
+        Console.WriteLine(message);
     }
 }

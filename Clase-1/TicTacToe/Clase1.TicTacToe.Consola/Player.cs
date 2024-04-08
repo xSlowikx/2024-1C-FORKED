@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Clase1.TicTacToe.Consola;
+namespace Clase1.ITicTacToe.Consola;
 
 public class Player
 {

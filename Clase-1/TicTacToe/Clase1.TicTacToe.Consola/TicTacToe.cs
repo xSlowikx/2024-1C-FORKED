@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Clase1.TicTacToe.Consola;
-
-public class TicTacToe
+namespace Clase1.ITicTacToe.Consola;
+public interface ITicTacToe
+{
+    void StartGame();
+}
+public class TicTacToe : ITicTacToe
 {
     private int currentPlayerIndex = 0; // Indice del jugador actual en el arreglo de jugadores
-    private int choice; // Esta variable almacena la posición elegida por el jugador para marcar
+    private String choice; // Esta variable almacena la posición elegida por el jugador para marcar
+    private int choiceParsed;
     private int flag = 0; // Este indicador verifica el estado del juego: 1 si alguien ganó, -1 si es un empate, 0 si el juego sigue
     private ConsoleIO console;
     private Board board;
@@ -23,7 +27,7 @@ public class TicTacToe
     {
         do
         {
-            console.clear();
+            // console.clear();
             console.writeLine("Player1:X and Player2:O");
             console.writeLine("\n");
             console.writeLine("Player {0} Chance", currentPlayerIndex + 1);
@@ -35,20 +39,23 @@ public class TicTacToe
             if (!IsValidInput(choice))
             {
                 console.writeLine("Invalid input. Please enter a number between 1 and 9.");
+                Task.Delay(1000).Wait();
                 continue; // Volver al inicio del bucle
             }
 
+            choiceParsed = int.Parse(choice); // Convertir la elección a un entero
+
             // Verificar si la posición elegida está disponible
-            if (board.checkPositions()[choice] != 'X' && board.checkPositions()[choice] != 'O')
+            if (board.checkPositions()[choiceParsed] != 'X' && board.checkPositions()[choiceParsed] != 'O')
             {
                 // Marcar la posición elegida con el símbolo del jugador actual
-                board.checkPositions()[choice] = players[currentPlayerIndex].GetSymbol();
+                board.checkPositions()[choiceParsed] = players[currentPlayerIndex].GetSymbol();
                 // Cambiar al siguiente jugador
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.Length;
             }
             else
             {
-                console.writeLine("Sorry, the row {0} is already marked with {1}", choice, board.checkPositions()[choice]);
+                console.writeLine("Sorry, the row {0} is already marked with {1}", choice, board.checkPositions()[choiceParsed]);
                 console.writeLine("\n");
                 console.writeLine("Please wait 2 seconds, board is reloading...");
                 Task.Delay(2000).Wait();
@@ -58,12 +65,12 @@ public class TicTacToe
         }
         while (flag != 1 && flag != -1);
 
-        console.clear();
+        // console.clear();
         console.writeLine(board.DisplayBoard());
 
         if (flag == 1)
         {
-            console.writeLine("Player {0} has won", (currentPlayerIndex % 2) + 1);
+            console.writeLine("Player {0} has won", ((currentPlayerIndex + 1) % 2) + 1);
         }
         else
         {
@@ -81,13 +88,26 @@ public class TicTacToe
         {
             console.writeLine("Thanks for playing! Goodbye.");
             // Salir del juego
-            Environment.Exit(0);
+            // Environment.Exit(0);
         }
     }
 
-    private bool IsValidInput(int choice)
+    private bool IsValidInput(String choice)
     {
-        return choice >= 1 && choice <= 9;
+        // Verificar si la cadena de entrada es nula o vacía
+        if (string.IsNullOrEmpty(choice))
+        {
+            return false;
+        }
+
+        // Intentar analizar la cadena como un entero
+        if (!int.TryParse(choice, out int choiceInt))
+        {
+            return false; // No es un número válido
+        }
+
+        // Verificar si el entero está en el rango de 1 a 9
+        return choiceInt >= 1 && choiceInt <= 9;
     }
 
     private void ResetGame()
@@ -96,5 +116,7 @@ public class TicTacToe
         board.resetBoard();
         currentPlayerIndex = 0;
         flag = 0;
+
+        StartGame(); // Iniciar el juego nuevamente
     }
 }
